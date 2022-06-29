@@ -9,6 +9,7 @@ namespace Com.MyCompany.MyGame
     public class Luncher : MonoBehaviourPunCallbacks
     {
         string gameversion = "1";
+        bool isConnecting;
         [SerializeField] private byte maxPlayersPerRoom = 2;
         [SerializeField] private GameObject controlPanel;
         [SerializeField] private GameObject progressLabel;
@@ -27,9 +28,12 @@ namespace Com.MyCompany.MyGame
 
         public override void OnConnectedToMaster()
         {
-            base.OnConnectedToMaster();
-            Debug.Log("OnConnectedTomaster()");
-            PhotonNetwork.JoinRandomRoom();
+            if (isConnecting)
+            {
+                Debug.Log("OnConnectedTomaster()");
+                PhotonNetwork.JoinRandomRoom();
+                isConnecting = false;
+            } 
         }
 
         public override void OnDisconnected(DisconnectCause cause)
@@ -49,9 +53,13 @@ namespace Com.MyCompany.MyGame
 
         public override void OnJoinedRoom()
         {
-            base.OnJoinedRoom();
-            Debug.Log("Do³¹czy³em do lobby!");
-            //Debug.LogError("Nick: " + PhotonNetwork.NickName);
+            Debug.Log("Po³¹czy³em siê!");
+            Debug.Log("Nick: " + PhotonNetwork.NickName);
+            if(PhotonNetwork.CurrentRoom.PlayerCount == 1)
+            {
+                Debug.Log("Wszytuje do lobby!");
+                PhotonNetwork.LoadLevel("1vs1");
+            }
         }
 
         public void Connected()
@@ -66,7 +74,7 @@ namespace Com.MyCompany.MyGame
             }
             else
             {
-                PhotonNetwork.ConnectUsingSettings();
+                isConnecting = PhotonNetwork.ConnectUsingSettings();
                 PhotonNetwork.GameVersion = gameversion;
                 Debug.Log("brak po³¹czenia");
             }
