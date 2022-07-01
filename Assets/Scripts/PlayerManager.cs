@@ -4,9 +4,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
+public class PlayerManager : MonoBehaviourPunCallbacks
 {
-    CharacterController characterController;
+    PhotonView PV;
+
+    private void Awake()
+    {
+        PV = GetComponent<PhotonView>();
+    }
+
+    private void Start()
+    {
+        if (PV.IsMine)
+        {
+            CreateController();
+        }
+    }
+
+    void CreateController()
+    {
+        Debug.Log("Instantiated Player Controller");
+    }
+
+
+    /*CharacterController characterController;
     Vector3 moveDirection;
     [SerializeField] float speed;
     Camera cam;
@@ -60,5 +81,5 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
             transform.rotation = Quaternion.Slerp(transform.rotation, rot_target, Time.deltaTime * 5.0f);
         }
 
-    }
+    }*/
 }

@@ -11,7 +11,7 @@ namespace Com.MyCompany.MyGame
 {
     public class GameManager : MonoBehaviourPunCallbacks
     {
-        public GameObject playerPrefab;
+       /* public GameObject playerPrefab;
 
         private void Start()
         {
@@ -66,6 +66,6 @@ namespace Com.MyCompany.MyGame
                 Debug.LogFormat("On playerLeftRoom {0}", PhotonNetwork.IsMasterClient);
                 LoadArena();
             }
-        }
+        }*/
     }
 }
