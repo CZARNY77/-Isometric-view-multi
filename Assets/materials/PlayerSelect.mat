@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PlayerDiamond
+  m_Name: PlayerSelect
   m_Shader: {fileID: 10, guid: 0000000000000000f000000000000000, type: 0}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -33,5 +33,5 @@ Material:
     - _Emission: 1
     - _EmissionLM: 0
     m_Colors:
-    - _Color: {r: 1, g: 0.64137936, b: 0, a: 1}
+    - _Color: {r: 1, g: 0, b: 0.26166153, a: 1}
   m_BuildTextureStacks: []
