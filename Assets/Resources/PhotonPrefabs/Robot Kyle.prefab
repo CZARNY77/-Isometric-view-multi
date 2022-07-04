@@ -757,6 +757,9 @@ GameObject:
   - component: {fileID: 5094944082510119125}
   - component: {fileID: 5094944082510119123}
   - component: {fileID: 5094944082510119126}
+  - component: {fileID: 4119446510061498048}
+  - component: {fileID: 5286993010358158538}
+  - component: {fileID: 7683105994267423998}
   m_Layer: 10
   m_Name: Robot Kyle
   m_TagString: Mob
@@ -894,6 +897,62 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 5094944082510119123}
+  hoverMat: {fileID: 2100000, guid: 98fb16a65172c954a9fe4e1f34f20371, type: 2}
+  selectMat: {fileID: 2100000, guid: 0cbf333e8fcd1744da1e4645fbd01897, type: 2}
+  normalMat: {fileID: 2100000, guid: 8359c4713dd1037439e21f22c71b419e, type: 2}
+  Objective: {fileID: 4142730226860984356, guid: e154ff326ee4f7c42974d705281f13c7, type: 3}
+--- !u!114 &4119446510061498048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3861007306207709639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 507e5741cec8a42dc964c8e0a4b55bd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  directionDampTime: 0.25
+--- !u!114 &5286993010358158538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3861007306207709639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 7683105994267423998}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &7683105994267423998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3861007306207709639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &4052347096161962480
 GameObject:
   m_ObjectHideFlags: 0

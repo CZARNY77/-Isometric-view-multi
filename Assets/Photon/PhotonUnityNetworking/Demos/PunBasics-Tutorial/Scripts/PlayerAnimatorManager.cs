@@ -29,7 +29,7 @@ namespace Photon.Pun.Demo.PunBasics
 		/// </summary>
 	    void Start () 
 	    {
-	        animator = GetComponent<Animator>();
+			animator = GetComponent<Animator>();
 	    }
 	        
 		/// <summary>
@@ -39,10 +39,10 @@ namespace Photon.Pun.Demo.PunBasics
 	    {
 
 			// Prevent control is connected to Photon and represent the localPlayer
-	        if( photonView.IsMine == false && PhotonNetwork.IsConnected == true )
+	        /*if( photonView.IsMine == false && PhotonNetwork.IsConnected == true )
 	        {
 	            return;
-	        }
+	        }*/
 
 			// failSafe is missing Animator component on GameObject
 	        if (!animator)

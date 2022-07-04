@@ -2,6 +2,7 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,15 +12,9 @@ public class PlayerController : MonoBehaviour
     Camera cam;
     PhotonView PV;
     [SerializeField] GameObject mobPrefabs;
-    string ID = "Jakub";
 
-    [SerializeField] GameObject Objective;
-    LayerMask mask;
-    [SerializeField] Material hover;
-    [SerializeField] Material select;
-    [SerializeField] Material normal;
     GameObject tempObject;
-    bool selected = false;
+    LayerMask maskMob;
 
     void Awake()
     {
@@ -27,8 +22,7 @@ public class PlayerController : MonoBehaviour
         cam = GetComponentInChildren<Camera>();
         characterController.detectCollisions = false;
         PV = GetComponentInChildren<PhotonView>();
-        mask = LayerMask.GetMask("Mob");
-
+        maskMob = LayerMask.GetMask("Mob");
     }
 
     private void Start()
@@ -37,8 +31,8 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(GetComponentInChildren<Camera>());
         }
-        GameObject cloneMob = Instantiate(mobPrefabs, new Vector3(0,0,0), Quaternion.identity);
-        cloneMob.GetComponent<MobController>().ownerID = ID;
+        else
+        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Robot Kyle"), new Vector3(0,1,5), Quaternion.identity);
     }
 
     void Update()
@@ -47,45 +41,23 @@ public class PlayerController : MonoBehaviour
             return;
 
         Ray mousePos = cam.ScreenPointToRay(Input.mousePosition);
-        Debug.DrawRay(mousePos.origin, mousePos.direction*20, Color.red);
         RaycastHit hit;
-        mask = LayerMask.GetMask("Mob");
-        if (Physics.Raycast(mousePos.origin, mousePos.direction * 20, out hit, Mathf.Infinity, mask) && !selected)
+        if (Physics.Raycast(mousePos, out hit, 20, maskMob))
         {
             tempObject = hit.collider.gameObject;
-            hit.collider.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material = hover;
-            if (Input.GetKeyDown(KeyCode.Mouse0))
-            {
-                hit.collider.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material = select;
-                selected = true;
-            }
+            tempObject.GetComponent<MobController>().setParameters(true, mousePos, hit);
         }
-        else
+        else if(tempObject)
         {
-            if(tempObject && !selected)
-            {
-                tempObject.GetComponentInChildren<SkinnedMeshRenderer>().material = normal;
-                tempObject = null;
-            }
+            tempObject.GetComponent<MobController>().setParameters(false, mousePos, hit);
 
-            if (Input.GetKeyDown(KeyCode.Mouse0) && selected)
-            {
-                
-                selected = false;
-                mask = LayerMask.GetMask("Floor");
-                if (Physics.Raycast(mousePos.origin, mousePos.direction * 20, out hit, Mathf.Infinity, mask))
-                {
-                    Instantiate(Objective, mousePos.direction * hit.distance + mousePos.origin + new Vector3(0, 0.1f, 0), Quaternion.Euler(90f, 0, 0));
-                    tempObject.GetComponent<MobController>().setParameters(cam);
-                }
-            }
         }
 
         move();
 
         if (Input.GetKey(KeyCode.Mouse1))
         {
-            moveCam();
+            //moveCam();
         }
     }
     void moveCam()

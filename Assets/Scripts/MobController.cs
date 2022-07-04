@@ -2,28 +2,90 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Photon.Pun;
 
 public class MobController : MonoBehaviour
 {
-    Camera cam;
-    bool moving = false;
     public NavMeshAgent agent;
-    public string ownerID;
+    Vector3 tempHitPoint;
+    bool selected = false;
+    bool hover = false;
+    GameObject tempObjective;
+    Ray ray;
+    RaycastHit hit;
 
-    // Update is called once per frame
+
+    [SerializeField] Material hoverMat;
+    [SerializeField] Material selectMat;
+    [SerializeField] Material normalMat;
+    [SerializeField] GameObject Objective;
+
+    PhotonView PV;
+
+    private void Awake()
+    {
+        PV = GetComponent<PhotonView>();
+    }
+
+
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) && cam != null)
+        if (!PV.IsMine)
+            return;
+
+
+        if (hover && !selected)
         {
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
-                agent.SetDestination(hit.point);
+            changeMaterial(0);
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                changeMaterial(1);
+                selected = true;
+            }
+        }
+        else if(!selected || (Input.GetKeyDown(KeyCode.Mouse0) && !hover))
+        {
+            changeMaterial(2);
+            selected = false;
         }
 
+        if (Input.GetKeyDown(KeyCode.Mouse1) && selected)
+        {
+            if (Physics.Raycast(ray, out hit))
+            {
+                agent.SetDestination(hit.point);
+                tempHitPoint = hit.point;
+                if(tempObjective) Destroy(tempObjective);
+                tempObjective = Instantiate(Objective, hit.point + new Vector3(0, 0.1f, 0), Quaternion.Euler(90f, 0, 0));
+            }
+        }
+
+        if (Vector3.Distance(tempHitPoint, transform.position) < 0.2f && tempObjective)
+        {
+            Destroy(tempObjective);
+        }
     }
-    public void setParameters(Camera _cam)
+
+    public void setParameters(bool _hover, Ray _ray, RaycastHit _hit)
     {
-        cam = _cam;
+        hover = _hover;
+        ray = _ray;
+        hit = _hit;
+    }
+
+    public void changeMaterial(int state)
+    {
+        switch (state)
+        {
+            case 0:
+                GetComponentInChildren<SkinnedMeshRenderer>().material = hoverMat;
+                break;
+            case 1:
+                GetComponentInChildren<SkinnedMeshRenderer>().material = selectMat;
+                break;
+            default:
+                GetComponentInChildren<SkinnedMeshRenderer>().material = normalMat;
+                break;
+        }
     }
 }
