@@ -8,6 +8,7 @@ public class MobController : MonoBehaviour
     Camera cam;
     bool moving = false;
     public NavMeshAgent agent;
+    public string ownerID;
 
     // Update is called once per frame
     void Update()

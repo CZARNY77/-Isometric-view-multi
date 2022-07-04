@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float speed;
     Camera cam;
     PhotonView PV;
+    [SerializeField] GameObject mobPrefabs;
+    string ID = "Jakub";
 
     [SerializeField] GameObject Objective;
     LayerMask mask;
@@ -35,7 +37,8 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(GetComponentInChildren<Camera>());
         }
-
+        GameObject cloneMob = Instantiate(mobPrefabs, new Vector3(0,0,0), Quaternion.identity);
+        cloneMob.GetComponent<MobController>().ownerID = ID;
     }
 
     void Update()
