@@ -188,6 +188,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
+  Objective: {fileID: 0}
+  hover: {fileID: 0}
+  select: {fileID: 0}
+  normal: {fileID: 0}
 --- !u!114 &4957132164708180792
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -35,6 +35,7 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(GetComponentInChildren<Camera>());
         }
+
     }
 
     void Update()
@@ -70,7 +71,10 @@ public class PlayerController : MonoBehaviour
                 selected = false;
                 mask = LayerMask.GetMask("Floor");
                 if (Physics.Raycast(mousePos.origin, mousePos.direction * 20, out hit, Mathf.Infinity, mask))
+                {
                     Instantiate(Objective, mousePos.direction * hit.distance + mousePos.origin + new Vector3(0, 0.1f, 0), Quaternion.Euler(90f, 0, 0));
+                    tempObject.GetComponent<MobController>().setParameters(cam);
+                }
             }
         }
 
