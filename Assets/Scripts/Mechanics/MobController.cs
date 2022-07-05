@@ -54,14 +54,16 @@ public class MobController : MonoBehaviour
             if (Physics.Raycast(ray, out hit))
             {
                 agent.SetDestination(hit.point);
+                GetComponent<MobAnimatorMenager>().switchAnim(false);
                 tempHitPoint = hit.point;
-                if(tempObjective) Destroy(tempObjective);
-                tempObjective = Instantiate(Objective, hit.point + new Vector3(0, 0.1f, 0), Quaternion.Euler(90f, 0, 0));
+                if (tempObjective) Destroy(tempObjective);
+                tempObjective = Instantiate(Objective, hit.point, Quaternion.Euler(90f, 0, 0));
             }
         }
 
         if (Vector3.Distance(tempHitPoint, transform.position) < 0.2f && tempObjective)
         {
+            GetComponent<MobAnimatorMenager>().switchAnim(true);
             Destroy(tempObjective);
         }
     }

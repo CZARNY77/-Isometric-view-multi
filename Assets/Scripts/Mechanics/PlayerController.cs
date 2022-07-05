@@ -2,6 +2,7 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.IO;
 
 public class PlayerController : MonoBehaviour
@@ -12,9 +13,13 @@ public class PlayerController : MonoBehaviour
     Camera cam;
     PhotonView PV;
     [SerializeField] GameObject mobPrefabs;
+    [SerializeField] Canvas myCanvas;
+    PanelInfo panelInfo;
 
     GameObject tempObject;
     LayerMask maskMob;
+    LayerMask maskMineral;
+    LayerMask maskFactory;
 
     void Awake()
     {
@@ -23,6 +28,8 @@ public class PlayerController : MonoBehaviour
         characterController.detectCollisions = false;
         PV = GetComponentInChildren<PhotonView>();
         maskMob = LayerMask.GetMask("Mob");
+        maskMineral = LayerMask.GetMask("Minerals");
+        maskFactory = LayerMask.GetMask("Factory");
     }
 
     private void Start()
@@ -32,7 +39,9 @@ public class PlayerController : MonoBehaviour
             Destroy(GetComponentInChildren<Camera>());
         }
         else
-        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Robot Kyle"), new Vector3(0,1,5), Quaternion.identity);
+        myCanvas = Instantiate(myCanvas);
+        panelInfo = myCanvas.GetComponentInChildren<PanelInfo>();
+        panelInfo.turnOff();
     }
 
     void Update()
@@ -52,13 +61,28 @@ public class PlayerController : MonoBehaviour
             tempObject.GetComponent<MobController>().setParameters(false, mousePos, hit);
 
         }
+        if(Physics.Raycast(mousePos, out hit, 20, maskMineral))
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                panelInfo.Informations(hit.collider.gameObject.GetComponent<RawMaterials>().count);
+            }
+            if (Input.GetKeyDown(KeyCode.Mouse1))
+            {
+                //tempObject.GetComponent<MobController>().dig();
+            }
+        }
+
+        if (Physics.Raycast(mousePos, out hit, 20, maskFactory))
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                //GUI fabryki
+            }
+        }
+
 
         move();
-
-        if (Input.GetKey(KeyCode.Mouse1))
-        {
-            //moveCam();
-        }
     }
     void moveCam()
     {
