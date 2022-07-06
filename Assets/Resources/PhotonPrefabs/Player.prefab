@@ -90,8 +90,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
-  mobPrefabs: {fileID: 3861007306207709639, guid: b6ede74131a24e94bbcb5f27030d0a13, type: 3}
   myCanvas: {fileID: 5621669833105819256, guid: 5cb8b136cb9f82247aa41f8691a50b17, type: 3}
+  countGold: 100
 --- !u!114 &4957132164708180792
 MonoBehaviour:
   m_ObjectHideFlags: 0

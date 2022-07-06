@@ -6,19 +6,21 @@ using Photon.Pun;
 
 public class MobController : MonoBehaviour
 {
-    public NavMeshAgent agent;
-    Vector3 tempHitPoint;
+    [SerializeField] bool working = false;
     bool selected = false;
     bool hover = false;
-    GameObject tempObjective;
+    Vector3 tempHitPoint;
     Ray ray;
     RaycastHit hit;
 
-
+    public NavMeshAgent agent;
     [SerializeField] Material hoverMat;
     [SerializeField] Material selectMat;
     [SerializeField] Material normalMat;
     [SerializeField] GameObject Objective;
+    GameObject tempObjective;
+    RawMaterials mineral;
+    PlayerController player;
 
     PhotonView PV;
 
@@ -58,6 +60,7 @@ public class MobController : MonoBehaviour
                 tempHitPoint = hit.point;
                 if (tempObjective) Destroy(tempObjective);
                 tempObjective = Instantiate(Objective, hit.point, Quaternion.Euler(90f, 0, 0));
+                working = false;
             }
         }
 
@@ -65,6 +68,13 @@ public class MobController : MonoBehaviour
         {
             GetComponent<MobAnimatorMenager>().switchAnim(true);
             Destroy(tempObjective);
+        }
+
+        if(working && Vector3.Distance(tempHitPoint, transform.position) - agent.stoppingDistance < 0.2f)
+        {
+            player.countGold += 100;
+            mineral.count -= 100;
+            agent.SetDestination(FactoryManager.Instance.transform.position + new Vector3(0,0, 3f));
         }
     }
 
@@ -89,5 +99,13 @@ public class MobController : MonoBehaviour
                 GetComponentInChildren<SkinnedMeshRenderer>().material = normalMat;
                 break;
         }
+    }
+
+    public void dig(GameObject _mineral, GameObject _player)
+    {
+        agent.stoppingDistance = 2f;
+        working = true;
+        mineral = _mineral.GetComponent<RawMaterials>();
+        player = _player.GetComponent<PlayerController>();
     }
 }

@@ -9,17 +9,20 @@ public class PlayerController : MonoBehaviour
 {
     CharacterController characterController;
     Vector3 moveDirection;
-    [SerializeField] float speed;
     Camera cam;
     PhotonView PV;
-    [SerializeField] GameObject mobPrefabs;
+
+    [SerializeField] float speed;
     [SerializeField] Canvas myCanvas;
     PanelInfo panelInfo;
+    FactoryPanel factoryPanel;
 
     GameObject tempObject;
     LayerMask maskMob;
     LayerMask maskMineral;
     LayerMask maskFactory;
+
+    public int countGold = 100;
 
     void Awake()
     {
@@ -39,9 +42,13 @@ public class PlayerController : MonoBehaviour
             Destroy(GetComponentInChildren<Camera>());
         }
         else
-        myCanvas = Instantiate(myCanvas);
-        panelInfo = myCanvas.GetComponentInChildren<PanelInfo>();
-        panelInfo.turnOff();
+        {
+            myCanvas = Instantiate(myCanvas);
+            panelInfo = myCanvas.GetComponentInChildren<PanelInfo>();
+            factoryPanel = myCanvas.GetComponentInChildren<FactoryPanel>();
+            panelInfo.turnOff();
+            factoryPanel.gameObject.SetActive(false);
+        }
     }
 
     void Update()
@@ -61,6 +68,8 @@ public class PlayerController : MonoBehaviour
             tempObject.GetComponent<MobController>().setParameters(false, mousePos, hit);
 
         }
+
+
         if(Physics.Raycast(mousePos, out hit, 20, maskMineral))
         {
             if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -69,18 +78,30 @@ public class PlayerController : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
-                //tempObject.GetComponent<MobController>().dig();
+                tempObject.GetComponent<MobController>().dig(hit.collider.gameObject, this.gameObject);
+                myCanvas.GetComponentInChildren<Text>().text = countGold.ToString();
             }
+        }
+        else
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+                panelInfo.turnOff();
         }
 
         if (Physics.Raycast(mousePos, out hit, 20, maskFactory))
         {
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                //GUI fabryki
+                hit.collider.gameObject.GetComponent<FactoryManager>().toSwitch(factoryPanel.gameObject);
             }
         }
+        /*else if(!Physics.Raycast(mousePos, out hit, 20, 5))
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+                factoryPanel.turnOff();
+        }*/
 
+        
 
         move();
     }
