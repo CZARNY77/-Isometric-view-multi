@@ -12,6 +12,8 @@ public class MobController : MonoBehaviour
     Vector3 tempHitPoint;
     Ray ray;
     RaycastHit hit;
+    bool blocked = false;
+    NavMeshHit navMeshHit;
 
     public NavMeshAgent agent;
     [SerializeField] Material hoverMat;
@@ -61,6 +63,11 @@ public class MobController : MonoBehaviour
                 if (tempObjective) Destroy(tempObjective);
                 tempObjective = Instantiate(Objective, hit.point, Quaternion.Euler(90f, 0, 0));
                 working = false;
+
+                blocked = NavMesh.Raycast(transform.position, hit.point, out navMeshHit, NavMesh.AllAreas);
+                Debug.DrawLine(transform.position, hit.point, blocked ? Color.red : Color.green);
+                if (blocked)
+                    Debug.DrawRay(navMeshHit.position, Vector3.up, Color.red);
             }
         }
 
