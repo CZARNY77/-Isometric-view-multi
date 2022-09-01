@@ -12,7 +12,6 @@ public class MobController : MonoBehaviour
     Vector3 tempHitPoint;
     Ray ray;
     RaycastHit hit;
-    bool blocked = false;
     NavMeshHit navMeshHit;
 
     public NavMeshAgent agent;
@@ -57,18 +56,18 @@ public class MobController : MonoBehaviour
         {
             if (Physics.Raycast(ray, out hit))
             {
-                agent.SetDestination(hit.point);
+                NavMesh.SamplePosition(hit.point, out navMeshHit, 10.0f, NavMesh.AllAreas);
+                tempHitPoint = navMeshHit.position;
+
+                agent.SetDestination(tempHitPoint);
                 GetComponent<MobAnimatorMenager>().switchAnim(false);
-                tempHitPoint = hit.point;
                 if (tempObjective) Destroy(tempObjective);
-                tempObjective = Instantiate(Objective, hit.point, Quaternion.Euler(90f, 0, 0));
+                tempObjective = Instantiate(Objective, tempHitPoint, Quaternion.Euler(90f, 0, 0));
                 working = false;
 
-                blocked = NavMesh.Raycast(transform.position, hit.point, out navMeshHit, NavMesh.AllAreas);
-                Debug.DrawLine(transform.position, hit.point, blocked ? Color.red : Color.green);
-                if (blocked)
-                    Debug.DrawRay(navMeshHit.position, Vector3.up, Color.red);
             }
+
+
         }
 
         if (Vector3.Distance(tempHitPoint, transform.position) < 0.2f && tempObjective)
@@ -81,7 +80,7 @@ public class MobController : MonoBehaviour
         {
             player.countGold += 100;
             mineral.count -= 100;
-            agent.SetDestination(FactoryManager.Instance.transform.position + new Vector3(0,0, 3f));
+            //agent.SetDestination(FactoryManager.Instance.transform.position + new Vector3(0,0, 3f));
         }
     }
 
@@ -110,7 +109,6 @@ public class MobController : MonoBehaviour
 
     public void dig(GameObject _mineral, GameObject _player)
     {
-        agent.stoppingDistance = 2f;
         working = true;
         mineral = _mineral.GetComponent<RawMaterials>();
         player = _player.GetComponent<PlayerController>();
