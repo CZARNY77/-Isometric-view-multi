@@ -4,9 +4,16 @@ using UnityEngine;
 using UnityEngine.AI;
 using Photon.Pun;
 
+enum Location
+{
+    magazine,
+    rawMaterial
+}
+
 public class MobController : MonoBehaviour
 {
     [SerializeField] bool working = false;
+    [SerializeField] bool walking = false;
     bool selected = false;
     bool hover = false;
     Vector3 tempHitPoint;
@@ -25,6 +32,8 @@ public class MobController : MonoBehaviour
 
     PhotonView PV;
 
+    Location goTo;
+
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
@@ -36,7 +45,13 @@ public class MobController : MonoBehaviour
         if (!PV.IsMine)
             return;
 
+        mobMarking();
+        mobMoving();
+        mobWorking();
+    }
 
+    void mobMarking()
+    {
         if (hover && !selected)
         {
             changeMaterial(0);
@@ -46,12 +61,15 @@ public class MobController : MonoBehaviour
                 selected = true;
             }
         }
-        else if(!selected || (Input.GetKeyDown(KeyCode.Mouse0) && !hover))
+        else if (!selected || (Input.GetKeyDown(KeyCode.Mouse0) && !hover))
         {
             changeMaterial(2);
             selected = false;
         }
+    }
 
+    void mobMoving()
+    {
         if (Input.GetKeyDown(KeyCode.Mouse1) && selected)
         {
             if (Physics.Raycast(ray, out hit))
@@ -59,29 +77,25 @@ public class MobController : MonoBehaviour
                 NavMesh.SamplePosition(hit.point, out navMeshHit, 10.0f, NavMesh.AllAreas);
                 tempHitPoint = navMeshHit.position;
 
-                agent.SetDestination(tempHitPoint);
-                GetComponent<MobAnimatorMenager>().switchAnim(false);
+                move(tempHitPoint, false);
                 if (tempObjective) Destroy(tempObjective);
                 tempObjective = Instantiate(Objective, tempHitPoint, Quaternion.Euler(90f, 0, 0));
-                working = false;
+                walking = false;
 
             }
-
-
         }
-
+        // usuwanie znacznika jak jest blisko znacznika
         if (Vector3.Distance(tempHitPoint, transform.position) < 0.2f && tempObjective)
         {
             GetComponent<MobAnimatorMenager>().switchAnim(true);
             Destroy(tempObjective);
         }
+    }
 
-        if(working && Vector3.Distance(tempHitPoint, transform.position) - agent.stoppingDistance < 0.2f)
-        {
-            player.countGold += 100;
-            mineral.count -= 100;
-            //agent.SetDestination(FactoryManager.Instance.transform.position + new Vector3(0,0, 3f));
-        }
+    void move(Vector3 tempHitPoint, bool stand)
+    {
+        agent.SetDestination(tempHitPoint);
+        GetComponent<MobAnimatorMenager>().switchAnim(stand);
     }
 
     public void setParameters(bool _hover, Ray _ray, RaycastHit _hit)
@@ -109,8 +123,48 @@ public class MobController : MonoBehaviour
 
     public void dig(GameObject _mineral, GameObject _player)
     {
-        working = true;
+        walking = true;
         mineral = _mineral.GetComponent<RawMaterials>();
         player = _player.GetComponent<PlayerController>();
+        goTo = Location.rawMaterial;
+    }
+
+    void mobWorking()
+    {
+        if (walking && !working)
+        {
+            if(goTo == Location.rawMaterial)
+            {
+                NavMesh.SamplePosition(mineral.gameObject.transform.position, out navMeshHit, 10.0f, NavMesh.AllAreas);
+                tempHitPoint = navMeshHit.position;
+                if(Vector3.Distance(tempHitPoint, transform.position) - agent.stoppingDistance < 0.2f)
+                {
+
+                    mineral.count -= 100;
+                    working = true;
+                    goTo = Location.magazine;
+                    Invoke("Working", 2.0f);
+                }
+            }
+            else if(goTo == Location.magazine)
+            {
+                NavMesh.SamplePosition(FactoryManager.Instance.transform.position, out navMeshHit, 10.0f, NavMesh.AllAreas);
+                tempHitPoint = navMeshHit.position;
+                if (Vector3.Distance(tempHitPoint, transform.position) - agent.stoppingDistance < 0.2f)
+                {
+                    player.countGold += 100;
+                    working = true;
+                    goTo = Location.rawMaterial;
+                    Invoke("Working", 2.0f);
+                }
+            }
+
+            move(tempHitPoint, working);
+        }
+    }
+        
+    void Working()
+    {
+        working = false;
     }
 }
