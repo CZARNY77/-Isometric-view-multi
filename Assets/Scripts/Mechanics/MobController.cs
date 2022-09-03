@@ -152,6 +152,10 @@ public class MobController : MonoBehaviour
                 tempHitPoint = navMeshHit.position;
                 if (Vector3.Distance(tempHitPoint, transform.position) - agent.stoppingDistance < 0.2f)
                 {
+                    if (mineral)
+                    {
+                        goTo = Location.rawMaterial;
+                    }
                     player.countGold += 100;
                     working = true;
                     goTo = Location.rawMaterial;

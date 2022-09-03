@@ -78,6 +78,7 @@ public class PlayerController : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
+                //Poprawiæ bo zmienia text tytlko ja idzie do pracy
                 tempObject.GetComponent<MobController>().dig(hit.collider.gameObject, this.gameObject);
                 myCanvas.GetComponentInChildren<Text>().text = countGold.ToString();
             }
