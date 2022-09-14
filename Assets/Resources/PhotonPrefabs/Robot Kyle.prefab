@@ -616,6 +616,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   working: 0
+  walking: 0
   agent: {fileID: 6921469303173445207}
   hoverMat: {fileID: 2100000, guid: 98fb16a65172c954a9fe4e1f34f20371, type: 2}
   selectMat: {fileID: 2100000, guid: 0cbf333e8fcd1744da1e4645fbd01897, type: 2}

@@ -91,6 +91,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 3
   myCanvas: {fileID: 5621669833105819256, guid: 5cb8b136cb9f82247aa41f8691a50b17, type: 3}
+  panelInfo: {fileID: 0}
   countGold: 100
 --- !u!114 &4957132164708180792
 MonoBehaviour:

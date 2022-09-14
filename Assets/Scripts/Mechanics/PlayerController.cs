@@ -13,8 +13,8 @@ public class PlayerController : MonoBehaviour
     PhotonView PV;
 
     [SerializeField] float speed;
-    [SerializeField] Canvas myCanvas;
-    PanelInfo panelInfo;
+    public Canvas myCanvas;
+    public PanelInfo panelInfo;
     FactoryPanel factoryPanel;
 
     GameObject tempObject;
@@ -74,13 +74,11 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                panelInfo.Informations(hit.collider.gameObject.GetComponent<RawMaterials>().count);
+                panelInfo.TurnOn(hit.collider.gameObject.GetComponent<RawMaterials>());
             }
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
-                //Poprawiæ bo zmienia text tytlko ja idzie do pracy
                 tempObject.GetComponent<MobController>().dig(hit.collider.gameObject, this.gameObject);
-                myCanvas.GetComponentInChildren<Text>().text = countGold.ToString();
             }
         }
         else

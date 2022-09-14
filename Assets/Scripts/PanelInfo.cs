@@ -5,21 +5,26 @@ using UnityEngine.UI;
 
 public class PanelInfo : MonoBehaviour
 {
-    // Start is called before the first frame update
-    public void Informations(int count)
+    RawMaterials material;
+
+    private void Update()
+    {
+        Informations();
+    }
+    public void Informations()
     {
         if (gameObject.activeSelf)
         {
-            gameObject.SetActive(false);
-        }
-        else
-        {
             Text[] texts = GetComponentsInChildren<Text>();
             texts[0].text = "Gold";
-            texts[1].text = "Count: " + count;
-            gameObject.SetActive(true);
+            texts[1].text = "Count: " + material.count;
         }
-        
+    }
+
+    public void TurnOn(RawMaterials m)
+    {
+        gameObject.SetActive(true);
+        material = m;
     }
 
     public void turnOff()

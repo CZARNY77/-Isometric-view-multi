@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Photon.Pun;
+using UnityEngine.UI;
 
 enum Location
 {
@@ -133,17 +134,15 @@ public class MobController : MonoBehaviour
     {
         if (walking && !working)
         {
-            if(goTo == Location.rawMaterial)
+            if(goTo == Location.rawMaterial && mineral)
             {
                 NavMesh.SamplePosition(mineral.gameObject.transform.position, out navMeshHit, 10.0f, NavMesh.AllAreas);
                 tempHitPoint = navMeshHit.position;
                 if(Vector3.Distance(tempHitPoint, transform.position) - agent.stoppingDistance < 0.2f)
                 {
-
-                    mineral.count -= 100;
                     working = true;
-                    goTo = Location.magazine;
                     Invoke("Working", 2.0f);
+                   
                 }
             }
             else if(goTo == Location.magazine)
@@ -152,13 +151,7 @@ public class MobController : MonoBehaviour
                 tempHitPoint = navMeshHit.position;
                 if (Vector3.Distance(tempHitPoint, transform.position) - agent.stoppingDistance < 0.2f)
                 {
-                    if (mineral)
-                    {
-                        goTo = Location.rawMaterial;
-                    }
-                    player.countGold += 100;
                     working = true;
-                    goTo = Location.rawMaterial;
                     Invoke("Working", 2.0f);
                 }
             }
@@ -170,5 +163,28 @@ public class MobController : MonoBehaviour
     void Working()
     {
         working = false;
+
+        if(goTo == Location.rawMaterial)
+        {
+            goTo = Location.magazine;
+            mineral.count -= 100;
+            if (mineral.count <= 0)
+            {
+                Destroy(mineral.gameObject);
+            }
+        }
+        else if(goTo == Location.magazine)
+        {
+            if (mineral)
+            {
+                goTo = Location.rawMaterial;
+            }
+            else
+            {
+                walking = false;
+            }
+            player.countGold += 100;
+            player.myCanvas.GetComponentInChildren<Text>().text = player.countGold.ToString();
+        }
     }
 }
