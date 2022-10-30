@@ -551,7 +551,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4759721911903040}
   - component: {fileID: 95509902755735526}
-  - component: {fileID: -5896948425936525561}
+  - component: {fileID: -5924904282843278577}
   - component: {fileID: 3264423485931305059}
   - component: {fileID: 6506262607667243917}
   - component: {fileID: 6921469303173445207}
@@ -603,7 +603,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &-5896948425936525561
+--- !u!114 &-5924904282843278577
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -620,7 +620,7 @@ MonoBehaviour:
   agent: {fileID: 6921469303173445207}
   hoverMat: {fileID: 2100000, guid: 98fb16a65172c954a9fe4e1f34f20371, type: 2}
   selectMat: {fileID: 2100000, guid: 0cbf333e8fcd1744da1e4645fbd01897, type: 2}
-  normalMat: {fileID: 2100000, guid: ccc50d631d14df84a982c4f4acd00013, type: 2}
+  normalMat: {fileID: 2100000, guid: 02490f38574ec9541a91585b214de9f6, type: 2}
   Objective: {fileID: 4142730226860984356, guid: e154ff326ee4f7c42974d705281f13c7, type: 3}
 --- !u!114 &3264423485931305059
 MonoBehaviour:

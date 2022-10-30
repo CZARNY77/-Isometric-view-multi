@@ -128,12 +128,18 @@ public class MobController : MonoBehaviour
         mineral = _mineral.GetComponent<RawMaterials>();
         player = _player.GetComponent<PlayerController>();
         goTo = Location.rawMaterial;
+
+        changeMaterial(2);
+        selected = false;
+
+        Debug.Log(walking + " " + mineral.name + " " + player.name + " " + goTo);
     }
 
     void mobWorking()
     {
         if (walking && !working)
         {
+            Debug.Log("Jestem");
             if(goTo == Location.rawMaterial && mineral)
             {
                 NavMesh.SamplePosition(mineral.gameObject.transform.position, out navMeshHit, 10.0f, NavMesh.AllAreas);
