@@ -4,7 +4,7 @@ I am testing Pun 2 on my project, which is based on an old game called "Parkan: 
 Below are some screens.<br>
 <br>
 <p align="center">
-  The game has a menu where you enter your nickname and then choose whether you want to join another player's room or create your own.
+  The game has a menu where you enter your nickname and then choose whether you want to join another player's room or create your own.<br>
   <img src="Picture/Lobby.png" alt="img_1" width="500px"><br>
 </p>
 <p align="center">
